@@ -1,0 +1,150 @@
+/* Requested visual refinements — layered on top of the original stylesheet. */
+
+/* 1) Put logo.png into the existing hero ring without disturbing the layout. */
+.hero-mark-ring{
+  background:url("assets/logo.png") center/72% auto no-repeat;
+  border-color:rgba(243,177,63,.36);
+  box-shadow:0 0 42px rgba(243,177,63,.08);
+}
+.hero-mark-core{
+  background:transparent;
+  border-color:transparent;
+}
+.hero-mark-core span,
+.hero-mark-core small{display:none}
+
+/* 2) Make the hero waveform span the whole form width. */
+.hero-wave-card .waveform.waveform-hero{
+  left:0;
+  right:0;
+  inset-top:18px;
+  inset-bottom:28px;
+  padding:0 12px;
+  gap:2px;
+}
+.hero-wave-card .waveform.waveform-hero i{
+  flex:1 1 0;
+  width:auto;
+  min-width:1px;
+}
+
+/* 3) Lift the About section so it sits closer to the hero artwork. */
+.about{
+  position:relative;
+  z-index:2;
+  margin-top:-38px;
+  padding-top:94px;
+}
+.about-copy .lead{transform:translateY(-6px)}
+
+/* 4) Hover/focus animation for process steps. */
+.process .step{
+  position:relative;
+  overflow:hidden;
+  transition:transform .35s ease,background-color .35s ease,border-color .35s ease;
+}
+.process .step::before{
+  content:"";
+  position:absolute;
+  left:0;
+  right:25px;
+  bottom:0;
+  height:2px;
+  background:linear-gradient(90deg,rgba(243,177,63,.75),transparent);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform .45s cubic-bezier(.2,.8,.2,1);
+}
+.process .step::after{
+  content:"";
+  position:absolute;
+  width:120px;
+  height:120px;
+  left:-60px;
+  top:35px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(243,177,63,.055),transparent 70%);
+  opacity:0;
+  transform:scale(.72);
+  transition:opacity .35s ease,transform .45s ease;
+  pointer-events:none;
+}
+.process .step:hover,
+.process .step:focus-within{
+  transform:translateY(-6px);
+  background:linear-gradient(180deg,rgba(243,177,63,.018),transparent 72%);
+}
+.process .step:hover::before,
+.process .step:focus-within::before{transform:scaleX(1)}
+.process .step:hover::after,
+.process .step:focus-within::after{opacity:1;transform:scale(1)}
+.process .step>span{
+  display:inline-block;
+  transition:transform .35s ease,text-shadow .35s ease;
+}
+.process .step:hover>span,
+.process .step:focus-within>span{
+  transform:translateX(4px);
+  text-shadow:0 0 14px rgba(243,177,63,.2);
+}
+.process .step h3{
+  transition:transform .35s ease,color .35s ease;
+}
+.process .step p{
+  transition:color .35s ease;
+}
+.process .step:hover h3,
+.process .step:focus-within h3{
+  transform:translateX(4px);
+  color:#eee9e1;
+}
+.process .step:hover p,
+.process .step:focus-within p{color:#918b82}
+
+/* 5) Soften the site's gold gradients and glows without changing the structure. */
+.cursor-glow{background:radial-gradient(circle,rgba(243,177,63,.045),transparent 70%)}
+.hero{
+  background-image:linear-gradient(rgba(5,5,5,.28),rgba(5,5,5,.60)),url("assets/background.png");
+}
+.hero-mark-core{box-shadow:none}
+.hero-wave-card{
+  background:linear-gradient(180deg,rgba(255,255,255,.015),rgba(255,255,255,.004));
+}
+.hero-wave-card:before{
+  background:radial-gradient(circle at 50% 50%,rgba(243,177,63,.045),transparent 68%);
+}
+.about{
+  background:radial-gradient(circle at 78% 42%,rgba(243,177,63,.022),transparent 32%),#060606;
+}
+.about-visual{
+  background:radial-gradient(circle at 55% 38%,rgba(243,177,63,.045),transparent 40%),linear-gradient(135deg,#0d0d0d,#060606);
+}
+.service-card{
+  background:linear-gradient(180deg,rgba(255,255,255,.008),rgba(255,255,255,.002));
+}
+.service-card:hover{
+  background:linear-gradient(180deg,rgba(243,177,63,.024),rgba(255,255,255,.003));
+}
+.video-placeholder{
+  background:linear-gradient(135deg,#13110e,#0b0b0b);
+}
+.video-placeholder:before{
+  background:radial-gradient(circle,rgba(243,177,63,.08),transparent 70%);
+}
+.cta-inner{
+  background:radial-gradient(circle at 50% 50%,rgba(243,177,63,.045),transparent 50%),#0a0a0a;
+}
+.contact{
+  background:radial-gradient(circle at 12% 30%,rgba(243,177,63,.024),transparent 28%),radial-gradient(circle at 88% 72%,rgba(243,177,63,.018),transparent 26%),#050505;
+}
+
+@media(max-width:1000px){
+  .about{margin-top:-24px;padding-top:82px}
+}
+@media(max-width:700px){
+  .hero-mark-ring{background-size:68% auto}
+  .hero-wave-card .waveform.waveform-hero{padding:0 7px}
+  .about{margin-top:-12px;padding-top:68px}
+  .process .step:hover,
+  .process .step:focus-within{transform:translateY(-3px)}
+}
