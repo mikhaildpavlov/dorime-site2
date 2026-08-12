@@ -71,7 +71,5 @@ const ctaWave=document.querySelector(".cta-wave");if(ctaWave){for(let i=0;i<70;i
 const tabs=document.querySelectorAll(".tab"),cards=document.querySelectorAll(".video-card");
 tabs.forEach(tab=>tab.addEventListener("click",()=>{tabs.forEach(t=>t.classList.remove("active"));tab.classList.add("active");const filter=tab.dataset.filter;cards.forEach(card=>card.classList.toggle("is-hidden",filter!=="all"&&card.dataset.category!==filter));}));
 
-document.querySelectorAll("[data-placeholder-link]").forEach(link=>link.addEventListener("click",e=>{e.preventDefault();alert(currentLang==="en"?"Add the real link in CONFIG in script.js.":"Добавьте реальную ссылку в CONFIG в script.js.");}));
-
 const form=document.getElementById("contact-form");
 form?.addEventListener("submit",e=>{e.preventDefault();const data=new FormData(form);const subject=currentLang==="en"?`New project — DorimЭ — ${data.get("name")||""}`:`Новый проект — DorimЭ — ${data.get("name")||""}`;const body=currentLang==="en"?[`Name: ${data.get("name")||""}`,`Company: ${data.get("company")||""}`,`Email / Telegram: ${data.get("contact")||""}`,"","Project:",`${data.get("message")||""}`].join("\n"):[`Имя: ${data.get("name")||""}`,`Компания: ${data.get("company")||""}`,`Email / Telegram: ${data.get("contact")||""}`,"","Проект:",`${data.get("message")||""}`].join("\n");window.location.href=`mailto:${CONFIG.contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;});
