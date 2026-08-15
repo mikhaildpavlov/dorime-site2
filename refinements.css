@@ -9,8 +9,15 @@
 @media(max-width:1000px){.about{margin-top:-24px;padding-top:82px}}@media(max-width:700px){.hero-mark-ring{background-size:68% auto}.hero-wave-card .waveform.waveform-hero{padding:0 7px}.about{margin-top:-12px;padding-top:68px}.process .step:hover,.process .step:focus-within{transform:translateY(-3px)}}
 
 
-/* Ensure metadata typography/spacing is identical. */
-.video-card > .video-info h3,.video-card:first-child > .video-info + div h3{margin-top:0}
-.video-card > .video-info p{margin-bottom:0}
-.video-card:first-child > .video-info > div:not(.video-card-video),
-.video-card:nth-child(2) > .video-info > div{display:block}
+/* Portfolio cards: keep both videos and their captions on exactly the same grid. */
+.video-card{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center}
+.video-card>.video-info{display:contents}
+.video-card>.video-info>.video-card-video,
+.video-card>.video-card-video{grid-column:1/-1;width:100%;aspect-ratio:16/10}
+.video-card>.video-info>div:not(.video-card-video){grid-column:1;display:block;padding:14px 2px}
+.video-card>.video-info>span{grid-column:2;padding:14px 2px;font-size:9px;color:#66625d;align-self:center}
+.video-card>.video-info h3{margin:0 0 4px}
+.video-card>.video-info p{margin:0}
+@media(max-width:700px){
+  .video-card{grid-template-columns:minmax(0,1fr) auto}
+}
