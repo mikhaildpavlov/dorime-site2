@@ -8,23 +8,27 @@
 .cursor-glow{background:radial-gradient(circle,rgba(243,177,63,.045),transparent 70%)}.hero{background-image:linear-gradient(rgba(5,5,5,.28),rgba(5,5,5,.60)),url("assets/background.png")}.hero-mark-core{box-shadow:none}.hero-wave-card{background:linear-gradient(180deg,rgba(255,255,255,.015),rgba(255,255,255,.004))}.hero-wave-card:before{background:radial-gradient(circle at 50% 50%,rgba(243,177,63,.045),transparent 68%)}.about{background:radial-gradient(circle at 78% 42%,rgba(243,177,63,.022),transparent 32%),#060606}.about-visual{background:radial-gradient(circle at 55% 38%,rgba(243,177,63,.045),transparent 40%),linear-gradient(135deg,#0d0d0d,#060606)}.service-card{background:linear-gradient(180deg,rgba(255,255,255,.008),rgba(255,255,255,.002))}.service-card:hover{background:linear-gradient(180deg,rgba(243,177,63,.024),rgba(255,255,255,.003))}.video-placeholder{background:linear-gradient(135deg,#13110e,#0b0b0b)}.video-placeholder:before{background:radial-gradient(circle,rgba(243,177,63,.08),transparent 70%)}.cta-inner{background:radial-gradient(circle at 50% 50%,rgba(243,177,63,.045),transparent 50%),#0a0a0a}.contact{background:radial-gradient(circle at 12% 30%,rgba(243,177,63,.024),transparent 28%),radial-gradient(circle at 88% 72%,rgba(243,177,63,.018),transparent 26%),#050505}
 @media(max-width:1000px){.about{margin-top:-24px;padding-top:82px}}@media(max-width:700px){.hero-mark-ring{background-size:68% auto}.hero-wave-card .waveform.waveform-hero{padding:0 7px}.about{margin-top:-12px;padding-top:68px}.process .step:hover,.process .step:focus-within{transform:translateY(-3px)}}
 
-/* Keep both portfolio videos in identical columns. */
-.video-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
-.video-card{min-width:0}
-.video-card-video{width:100%;min-width:0}
+/* Portfolio: both cards use exactly the same two-row layout. */
+.video-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
+.video-card{min-width:0;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto;align-items:start}
+.video-card-video{width:100%;min-width:0;grid-column:1;grid-row:1}
 .video-card-video video{display:block;width:100%;height:100%;min-width:0;object-fit:cover}
 
-/* Align both portfolio captions identically: title/description left, duration right. */
-.video-card .video-info{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-rows:auto auto!important;column-gap:12px;row-gap:0;align-items:start;width:100%}
-.video-card .video-info > div:not(.video-card-video){grid-column:1;grid-row:1 / span 2;padding-top:0;min-width:0}
-.video-card .video-info > span{grid-column:2;grid-row:1 / span 2;justify-self:end;padding-top:0;white-space:nowrap;text-align:right}
+/* First card: its original .video-info wraps the video and caption.
+   Flatten that wrapper so the video occupies row 1 and metadata row 2. */
+.video-card:first-child > .video-info{display:contents!important}
+.video-card:first-child > .video-info > .video-card-video{grid-column:1;grid-row:1}
+.video-card:first-child > .video-info > div:not(.video-card-video){grid-column:1;grid-row:2;padding-top:14px;min-width:0}
+.video-card:first-child > .video-info > span{grid-column:1;grid-row:2;justify-self:end;padding-top:14px;white-space:nowrap;text-align:right}
 
-/* Card 01 has the video inside .video-info; keep it above the caption row. */
-.video-card:first-child > .video-info > .video-card-video{grid-column:1 / -1;grid-row:1}
-.video-card:first-child > .video-info > div:not(.video-card-video){grid-column:1;grid-row:2;padding-top:14px}
-.video-card:first-child > .video-info > span{grid-column:2;grid-row:2;padding-top:14px}
+/* Second card: video row 1, metadata row 2. */
+.video-card:nth-child(2) > .video-placeholder{grid-column:1;grid-row:1}
+.video-card:nth-child(2) > .video-info{grid-column:1;grid-row:2;display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-rows:auto auto!important;column-gap:12px;align-items:start;width:100%;margin-top:14px}
+.video-card:nth-child(2) > .video-info > div{grid-column:1;grid-row:1 / span 2;min-width:0;padding-top:0}
+.video-card:nth-child(2) > .video-info > span{grid-column:2;grid-row:1 / span 2;justify-self:end;padding-top:0;white-space:nowrap;text-align:right}
 
-/* Card 02 keeps its video above the metadata row. */
-.video-card:nth-child(2) > .video-info{margin-top:14px}
-.video-card:nth-child(2) > .video-info > div{grid-column:1;grid-row:1 / span 2}
-.video-card:nth-child(2) > .video-info > span{grid-column:2;grid-row:1 / span 2}
+/* Ensure metadata typography/spacing is identical. */
+.video-card > .video-info h3,.video-card:first-child > .video-info + div h3{margin-top:0}
+.video-card > .video-info p{margin-bottom:0}
+.video-card:first-child > .video-info > div:not(.video-card-video),
+.video-card:nth-child(2) > .video-info > div{display:block}
