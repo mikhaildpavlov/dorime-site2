@@ -14,12 +14,7 @@ const translations = {
     "why.title":"Sound you<br>can <em>trust.</em>","why.1.title":"Professional sound","why.1.text":"Clean recording and thoughtful post-production.","why.2.title":"A voice for the task","why.2.text":"We match tone, delivery and character to your project.","why.3.title":"Full cycle","why.3.text":"From the first brief to the finished media file.","why.4.title":"On time","why.4.text":"Structured work and clear communication throughout.",
     "cta.title":"Have a project?<br>Let’s give it<br><em>a voice.</em>","cta.text":"Tell us what you need voiced and we’ll suggest the right way to make it sound.",
     "contact.title":"Talk to <em>DorimЭ</em>","contact.text":"Write to us or fill out the form. We’ll reply within one business day with a collaboration plan.",
-    "form.name":"Name","form.namePlaceholder":"How should we address you?","form.company":"Company","form.companyPlaceholder":"Company or project name","form.contact":"Email / Telegram","form.contactPlaceholder":"Your preferred way to reach you","form.message":"Tell us about the project","form.messagePlaceholder":"What needs a voice, deadlines, references","form.submit":"Send request","form.note": "The form sends a message directly to our email without opening your mail app.",
-"form.sending": "Sending",
-"form.sent": "Sent",
-"form.success": "Thank you! Your message has been sent successfully.",
-"form.error": "Oops! There was a problem sending your message. Please try again or email us directly.",
-,"footer.tag":"Voiceover studio","footer.copy":"© 2026 DorimЭ. All rights reserved."
+    "form.name":"Name","form.namePlaceholder":"How should we address you?","form.company":"Company","form.companyPlaceholder":"Company or project name","form.contact":"Email / Telegram","form.contactPlaceholder":"Your preferred way to reach you","form.message":"Tell us about the project","form.messagePlaceholder":"What needs a voice, deadlines, references","form.submit":"Send request","form.note":"The form opens your email client with a prefilled message.","footer.tag":"Voiceover studio","footer.copy":"© 2026 DorimЭ. All rights reserved."
   },
   ru: {
     "nav.about":"О студии","nav.services":"Услуги","nav.portfolio":"Портфолио","nav.process":"Процесс","nav.contact":"Контакты",
@@ -34,11 +29,7 @@ const translations = {
     "why.title":"Звук, которому<br>можно <em>доверять.</em>","why.1.title":"Профессиональный звук","why.1.text":"Чистая запись и качественный постпродакшен.","why.2.title":"Голос под задачу","why.2.text":"Подбираем тембр, подачу и характер под ваш проект.","why.3.title":"Полный цикл","why.3.text":"От первого запроса до готового медиаконтента.","why.4.title":"Соблюдаем сроки","why.4.text":"Работаем структурированно и держим клиента в курсе.",
     "cta.title":"Есть проект?<br>Давайте дадим ему<br><em>голос.</em>","cta.text":"Расскажите, что нужно озвучить, — мы предложим оптимальный формат работы.",
     "contact.title":"Связаться с <em>DorimЭ</em>","contact.text":"Напишите нам или заполните форму. Мы ответим в течение одного рабочего дня и предложим следующий шаг.",
-    "form.name":"Имя","form.namePlaceholder":"Как к вам обращаться?","form.company":"Компания","form.companyPlaceholder":"Название компании или проекта","form.contact":"Email / Telegram","form.contactPlaceholder":"Как с вами связаться?","form.message":"Расскажите о проекте","form.messagePlaceholder":"Что нужно озвучить, сроки, референсы","form.submit":"Отправить заявку","form.note": "Форма отправляет сообщение напрямую на наш email, не открывая почтовую программу.",
-"form.sending": "Отправка",
-"form.sent": "Отправлено",
-"form.success": "Спасибо! Ваше сообщение успешно отправлено.",
-"form.error": "Упс! Произошла ошибка при отправке. Пожалуйста, попробуйте еще раз или напишите нам на email.""footer.tag":"Студия озвучивания","footer.copy":"© 2026 DorimЭ. Все права защищены."
+    "form.name":"Имя","form.namePlaceholder":"Как к вам обращаться?","form.company":"Компания","form.companyPlaceholder":"Название компании или проекта","form.contact":"Email / Telegram","form.contactPlaceholder":"Как с вами связаться?","form.message":"Расскажите о проекте","form.messagePlaceholder":"Что нужно озвучить, сроки, референсы","form.submit":"Отправить заявку","footer.tag":"Студия озвучивания","footer.copy":"© 2026 DorimЭ. Все права защищены."
   }
 };
 
@@ -80,57 +71,5 @@ const ctaWave=document.querySelector(".cta-wave");if(ctaWave){for(let i=0;i<70;i
 const tabs=document.querySelectorAll(".tab"),cards=document.querySelectorAll(".video-card");
 tabs.forEach(tab=>tab.addEventListener("click",()=>{tabs.forEach(t=>t.classList.remove("active"));tab.classList.add("active");const filter=tab.dataset.filter;cards.forEach(card=>card.classList.toggle("is-hidden",filter!=="all"&&card.dataset.category!==filter));}));
 
-const form = document.getElementById("contact-form");
-form?.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  
-  const submitBtn = form.querySelector('button[type="submit"]');
-  const note = form.querySelector(".form-note");
-  const originalBtnText = submitBtn.innerHTML;
-  const dict = translations[currentLang];
-
-  // 1. Блокируем кнопку и показываем статус отправки
-  submitBtn.disabled = true;
-  submitBtn.innerHTML = `<span>${dict["form.sending"]}</span><b>↗</b>`;
-  note.style.color = ""; // Сброс цвета текста
-
-  // 2. Собираем данные формы
-  const formData = new FormData(form);
-  
-  // Добавляем тему письма динамически в зависимости от языка
-  formData.append("subject", currentLang === "en" 
-    ? `New project — DorimЭ — ${formData.get("name") || "Unknown"}` 
-    : `Новый проект — DorimЭ — ${formData.get("name") || "Не указано"}`
-  );
-
-  try {
-    // 3. Отправляем запрос к Web3Forms
-    const response = await fetch("https://api.web3forms.com/submit", {
-      method: "POST",
-      body: formData
-    });
-    const data = await response.json();
-
-    if (data.success) {
-      form.reset(); // Очищаем форму
-      note.textContent = dict["form.success"];
-      note.style.color = "#4ade80"; // Зеленый цвет успеха
-      submitBtn.innerHTML = `<span>${dict["form.sent"]}</span><b>↗</b>`;
-    } else {
-      throw new Error(data.message || "Submission failed");
-    }
-  } catch (error) {
-    console.error("Form submission error:", error);
-    note.textContent = dict["form.error"];
-    note.style.color = "#f87171"; // Красный цвет ошибки
-    submitBtn.innerHTML = originalBtnText;
-  } finally {
-    // 4. Возвращаем интерфейс в исходное состояние через 4 секунды
-    setTimeout(() => {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = originalBtnText;
-      note.style.color = "";
-      note.textContent = dict["form.note"];
-    }, 4000);
-  }
-});
+const form=document.getElementById("contact-form");
+form?.addEventListener("submit",e=>{e.preventDefault();const data=new FormData(form);const subject=currentLang==="en"?`New project — DorimЭ — ${data.get("name")||""}`:`Новый проект — DorimЭ — ${data.get("name")||""}`;const body=currentLang==="en"?[`Name: ${data.get("name")||""}`,`Company: ${data.get("company")||""}`,`Email / Telegram: ${data.get("contact")||""}`,"","Project:",`${data.get("message")||""}`].join("\n"):[`Имя: ${data.get("name")||""}`,`Компания: ${data.get("company")||""}`,`Email / Telegram: ${data.get("contact")||""}`,"","Проект:",`${data.get("message")||""}`].join("\n");window.location.href=`mailto:${CONFIG.contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;});
