@@ -37,7 +37,6 @@
 	<div class="portfolio-tabs reveal"><button class="tab active" data-filter="all" data-i18n="portfolio.all">All</button><button class="tab" data-filter="dub">01 / <span data-i18n="portfolio.dub">Dubbing</span></button><button class="tab" data-filter="voice">02 / <span data-i18n="portfolio.voice">Voiceover</span></button></div>
 	<div class="video-grid">
 	<article class="video-card reveal" data-category="dub">
-
 	<div class="video-info">
 	<div class="video-placeholder video-placeholder-media video-card-video">
 	<video preload="metadata" playsinline aria-label="DorimЭ Dubbing demo">
@@ -77,7 +76,6 @@
   <label><span data-i18n="form.contact">Email / Telegram</span><input name="contact" type="text" placeholder="Your preferred way to reach you" data-i18n-placeholder="form.contactPlaceholder" required></label>
   <label><span data-i18n="form.message">Tell us about the project</span><textarea name="message" rows="5" placeholder="What needs a voice, deadlines, references" data-i18n-placeholder="form.messagePlaceholder" required></textarea></label>
   <button class="button button-primary" type="submit"><span data-i18n="form.submit">Send request</span><b>↗</b></button>
-  
   <p class="form-note" data-i18n="form.note">The form sends a message directly to our email without opening your mail app.</p>
 </form>
 	</div></section>
@@ -93,9 +91,16 @@
         const formatTime = seconds => { if (!Number.isFinite(seconds)) return '00:00'; const total = Math.round(seconds); return `${String(Math.floor(total / 60)).padStart(2,'0')}:${String(total % 60).padStart(2,'0')}`; };
         const syncUI = () => { const playing = !video.paused && !video.ended; launch?.classList.toggle('is-hidden', playing); launch?.setAttribute('aria-pressed', String(playing)); if (launchIcon) launchIcon.textContent = playing ? '❚❚' : '▶'; if (playPause) playPause.textContent = playing ? '❚❚' : '▶'; if (mute) mute.textContent = video.muted ? '🔇' : '🔊'; if (progressBar) progressBar.style.width = `${video.duration ? (video.currentTime / video.duration) * 100 : 0}%`; };
         const togglePlay = async () => { try { if (video.paused || video.ended) await video.play(); else video.pause(); } catch (err) { console.warn('Video playback could not start:', err); } syncUI(); };
+        const seekToClientX = clientX => { if (!video.duration || !progress) return; const rect = progress.getBoundingClientRect(); const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width)); video.currentTime = ratio * video.duration; };
+        const seekFromPointer = event => { seekToClientX(event.clientX); };
         launch?.addEventListener('click', togglePlay); playPause?.addEventListener('click', togglePlay); mute?.addEventListener('click', () => { video.muted = !video.muted; syncUI(); });
         fullscreen?.addEventListener('click', async () => { try { if (document.fullscreenElement) await document.exitFullscreen(); else if (video.requestFullscreen) await video.requestFullscreen(); else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen(); } catch (err) { console.warn('Fullscreen is unavailable:', err); } });
-        progress?.addEventListener('click', e => { if (!video.duration) return; const rect = progress.getBoundingClientRect(); video.currentTime = ((e.clientX - rect.left) / rect.width) * video.duration; });
+        progress?.addEventListener('click', event => seekToClientX(event.clientX));
+        progress?.addEventListener('pointerdown', event => { event.preventDefault(); progress.setPointerCapture?.(event.pointerId); seekFromPointer(event); });
+        progress?.addEventListener('pointermove', event => { if (event.buttons || event.pressure > 0) seekFromPointer(event); });
+        progress?.addEventListener('pointerup', event => { seekFromPointer(event); progress.releasePointerCapture?.(event.pointerId); });
+        progress?.addEventListener('touchstart', event => { if (event.touches[0]) { event.preventDefault(); seekToClientX(event.touches[0].clientX); } }, { passive:false });
+        progress?.addEventListener('touchmove', event => { if (event.touches[0]) { event.preventDefault(); seekToClientX(event.touches[0].clientX); } }, { passive:false });
         video.addEventListener('loadedmetadata', () => { if (durationLabel) durationLabel.textContent = formatTime(video.duration); syncUI(); }); video.addEventListener('timeupdate', syncUI); video.addEventListener('play', syncUI); video.addEventListener('pause', syncUI); video.addEventListener('ended', syncUI); syncUI();
       });
     });
