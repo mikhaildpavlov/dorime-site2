@@ -76,6 +76,59 @@ const ctaWave=document.querySelector(".cta-wave");if(ctaWave){for(let i=0;i<70;i
 const tabs=document.querySelectorAll(".tab"),cards=document.querySelectorAll(".video-card");
 tabs.forEach(tab=>tab.addEventListener("click",()=>{tabs.forEach(t=>t.classList.remove("active"));tab.classList.add("active");const filter=tab.dataset.filter;cards.forEach(card=>card.classList.toggle("is-hidden",filter!=="all"&&card.dataset.category!==filter));}));
 
+/* Mobile-safe video seeking.
+   Pointer events work for both mouse and touch, while touch-action prevents
+   the browser's scroll gesture from stealing a drag on the progress bar. */
+function setupVideoSeeking(){
+  document.querySelectorAll(".video-card").forEach(card=>{
+    const video=card.querySelector("video");
+    const progress=card.querySelector(".video-progress, input[type=range][data-video-progress]");
+    if(!video || !progress || progress.dataset.seekReady === "true") return;
+
+    progress.dataset.seekReady="true";
+    progress.style.touchAction="none";
+
+    const getRatio=(event)=>{
+      const rect=progress.getBoundingClientRect();
+      if(!rect.width) return 0;
+      return Math.max(0,Math.min(1,(event.clientX-rect.left)/rect.width));
+    };
+
+    const seekFromEvent=(event)=>{
+      if(!Number.isFinite(video.duration) || video.duration <= 0) return;
+      video.currentTime=getRatio(event)*video.duration;
+      if(progress instanceof HTMLInputElement && progress.type === "range"){
+        progress.value=String(getRatio(event)*100);
+      }
+    };
+
+    let dragging=false;
+    progress.addEventListener("pointerdown", event=>{
+      dragging=true;
+      progress.setPointerCapture?.(event.pointerId);
+      seekFromEvent(event);
+      event.preventDefault();
+    });
+    progress.addEventListener("pointermove", event=>{
+      if(!dragging) return;
+      seekFromEvent(event);
+      event.preventDefault();
+    });
+    const stopDragging=event=>{
+      if(!dragging) return;
+      seekFromEvent(event);
+      dragging=false;
+      try{progress.releasePointerCapture?.(event.pointerId);}catch(_){ }
+      event.preventDefault();
+    };
+    progress.addEventListener("pointerup", stopDragging);
+    progress.addEventListener("pointercancel", stopDragging);
+    progress.addEventListener("lostpointercapture", ()=>{dragging=false;});
+  });
+}
+
+setupVideoSeeking();
+
 const form=document.getElementById("contact-form");
 form?.addEventListener("submit", async e=>{
   e.preventDefault();
@@ -114,100 +167,9 @@ form?.addEventListener("submit", async e=>{
     }
   } catch(error) {
     console.error("Web3Forms error:",error);
-    alert(currentLang === "en" ? "Something went wrong. Please try again or email hello@dorime.studio." : "Не удалось отправить заявку. Попробуйте ещё раз или напишите на hello@dorime.studio.");
+    alert(currentLang === "en" ? "Something went wrong. Please try again or contact us directly." : "Что-то пошло не так. Попробуйте ещё раз или свяжитесь с нами напрямую.");
   } finally {
     form.dataset.submitting="false";
     if(submitButton){submitButton.disabled=false;submitButton.textContent=originalButtonText;}
   }
 });
-
-/* Mobile navigation + back-to-top controls */
-(() => {
-  const header = document.querySelector(".site-header");
-  const toggle = document.querySelector(".menu-toggle");
-  const nav = document.querySelector(".nav");
-  if (!header || !toggle || !nav) return;
-
-  let mobilePanel = document.querySelector(".mobile-menu-panel");
-  if (!mobilePanel) {
-    mobilePanel = document.createElement("div");
-    mobilePanel.className = "mobile-menu-panel";
-    mobilePanel.setAttribute("aria-hidden", "true");
-
-    const panelNav = document.createElement("nav");
-    panelNav.className = "mobile-menu-nav";
-    panelNav.setAttribute("aria-label", "Mobile navigation");
-
-    nav.querySelectorAll("a").forEach(link => {
-      const clone = link.cloneNode(true);
-      panelNav.appendChild(clone);
-    });
-
-    const panelActions = document.createElement("div");
-    panelActions.className = "mobile-menu-actions";
-
-    const languages = document.querySelector(".language-switcher");
-    if (languages) panelActions.appendChild(languages.cloneNode(true));
-
-    const cta = document.querySelector(".header-cta");
-    if (cta) panelActions.appendChild(cta.cloneNode(true));
-
-    mobilePanel.append(panelNav, panelActions);
-    document.body.appendChild(mobilePanel);
-
-    mobilePanel.addEventListener("click", event => {
-      const link = event.target.closest("a");
-      if (!link) return;
-      closeMobileMenu();
-    });
-
-    mobilePanel.querySelectorAll(".lang-btn").forEach(btn => {
-      btn.addEventListener("click", () => applyLanguage(btn.dataset.lang));
-    });
-  }
-
-  function openMobileMenu() {
-    header.classList.add("mobile-open");
-    mobilePanel.classList.add("is-open");
-    mobilePanel.setAttribute("aria-hidden", "false");
-    toggle.setAttribute("aria-expanded", "true");
-    toggle.setAttribute("aria-label", "Close menu");
-    document.body.classList.add("mobile-menu-open");
-  }
-
-  function closeMobileMenu() {
-    header.classList.remove("mobile-open");
-    mobilePanel.classList.remove("is-open");
-    mobilePanel.setAttribute("aria-hidden", "true");
-    toggle.setAttribute("aria-expanded", "false");
-    toggle.setAttribute("aria-label", "Open menu");
-    document.body.classList.remove("mobile-menu-open");
-  }
-
-  toggle.replaceWith(toggle.cloneNode(true));
-  const freshToggle = document.querySelector(".menu-toggle");
-  freshToggle.addEventListener("click", () => {
-    mobilePanel.classList.contains("is-open") ? closeMobileMenu() : openMobileMenu();
-  });
-
-  window.addEventListener("resize", () => {
-    if (window.innerWidth > 700) closeMobileMenu();
-  });
-
-  const topButton = document.createElement("button");
-  topButton.className = "back-to-top";
-  topButton.type = "button";
-  topButton.setAttribute("aria-label", "Back to top");
-  topButton.setAttribute("title", "Back to top");
-  topButton.innerHTML = "<span aria-hidden=\"true\">↑</span>";
-  document.body.appendChild(topButton);
-
-  const updateTopButton = () => {
-    topButton.classList.toggle("is-visible", window.scrollY > 500);
-  };
-  window.addEventListener("scroll", updateTopButton, { passive: true });
-  topButton.addEventListener("click", () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  });
-  updateTopButton();
-})();
