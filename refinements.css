@@ -41,3 +41,11 @@ body.mobile-menu-open{overflow:hidden;touch-action:none}
   .back-to-top span{font-size:22px;line-height:1;transform:translateY(-1px)}
 }
 @media(min-width:701px){.back-to-top{display:none}}
+
+/* Lead with the studio's offer and bring demos directly after the hero. */
+.hero .hero-brand{font-size:clamp(32px,5vw,56px);font-weight:800;letter-spacing:-.065em;margin:20px 0 18px;line-height:1}
+.hero .hero-brand span{color:var(--accent)}
+.hero h1{font-size:clamp(32px,5.3vw,64px);line-height:1.08;letter-spacing:-.045em;margin:0 auto 20px;max-width:880px;text-wrap:balance}
+.hero-tagline{font-size:clamp(16px,2vw,22px);color:#c3bfba;margin:0 0 14px;line-height:1.4}
+.hero .hero-text{max-width:650px}
+main>.portfolio+.about{margin-top:0}
