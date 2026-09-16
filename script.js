@@ -9,7 +9,7 @@ const translations = {
   en: {
     "nav.about":"About us","nav.services":"Services","nav.portfolio":"Portfolio","nav.process":"Process","nav.contact":"Contact",
     "cta.discuss":"Discuss a project","cta.work":"Watch our work",
-    "hero.eyebrow":"Professional voiceover studio","hero.tagline":"Where every voice becomes a story.","hero.text":"Professional voiceover, recording and audio production for ads, video, games, brands and media.",
+    "hero.eyebrow":"Professional voiceover studio","hero.title":"Russian dubbing & voiceover for animation, film and games","hero.tagline":"Where every voice becomes a story.","hero.text":"Voice casting, directed recording and audio post-production — from your brief to finished Russian-language audio.",
     "sections.about":"About the studio","sections.services":"Services","sections.portfolio":"Portfolio","sections.process":"Process","sections.why":"Why DorimE","sections.cta":"Your project","sections.contact":"Contact",
     "about.title":"We create sound<br>that <em>stays</em><br>with you.","about.lead":"DorimE is a professional voiceover studio bringing together voice talent, direction, sound engineering and modern post-production.","about.text":"We turn a script into sound that works for your goal — from a short video to a complete audio production.","about.stat1":"Professional recording","about.stat2":"Experienced voice talent","about.stat3":"Post-production","about.stat4":"Personal approach","about.quality":"studio quality",
     "services.title":"A complete sound<br><em>production partner.</em>",
@@ -24,7 +24,7 @@ const translations = {
   ru: {
     "nav.about":"О студии","nav.services":"Услуги","nav.portfolio":"Портфолио","nav.process":"Процесс","nav.contact":"Контакты",
     "cta.discuss":"Обсудить проект","cta.work":"Посмотреть работы",
-    "hero.eyebrow":"Профессиональная студия озвучивания","hero.tagline":"Где каждый голос становится историей.","hero.text":"Профессиональная озвучка, запись и аудиопродакшен для рекламы, видео, игр, брендов и медиа.",
+    "hero.eyebrow":"Профессиональная студия озвучивания","hero.title":"Дубляж и озвучка на русском для анимации, кино и игр","hero.tagline":"Где каждый голос становится историей.","hero.text":"Подбор голосов, запись с режиссёром и постпродакшен — от вашего задания до готового звука на русском языке.",
     "sections.about":"О студии","sections.services":"Услуги","sections.portfolio":"Портфолио","sections.process":"Процесс","sections.why":"Почему DorimE","sections.cta":"Ваш проект","sections.contact":"Контакты",
     "about.title":"Мы создаём звук,<br>который <em>остаётся</em><br>с вами.","about.lead":"DorimE — профессиональная студия озвучивания, где голос, режиссура, звукорежиссура и современный постпродакшен работают как единое целое.","about.text":"Мы превращаем сценарий в звук, который работает на вашу задачу — от короткого ролика до полноценного аудиопродакшена.","about.stat1":"Профессиональная запись","about.stat2":"Опытные дикторы","about.stat3":"Пост-продакшен","about.stat4":"Индивидуальный подход","about.quality":"качество студии",
     "services.title":"Полный цикл<br><em>работы со звуком.</em>",
